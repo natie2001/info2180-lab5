@@ -1,1 +1,120 @@
-/* Add your own styles */
+
+body {
+    font-family: "Segoe UI", Arial, sans-serif;
+    background: linear-gradient(135deg, #1a73e8, #0f4c81);
+    margin: 0;
+    padding: 0;
+    color: #fff;
+}
+
+
+header {
+    text-align: center;
+    padding: 40px 20px;
+    background: rgba(0, 0, 0, 0.25);
+    backdrop-filter: blur(8px);
+}
+
+h1 {
+    font-size: 42px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    margin: 0;
+}
+
+
+main {
+    max-width: 700px;
+    margin: 50px auto;
+    padding: 20px;
+}
+
+
+#controls {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 40px;
+    text-align: center;
+}
+
+label {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+#country {
+    width: 100%;
+    padding: 12px 18px;
+    border: none;
+    border-radius: 12px;
+    font-size: 18px;
+    transition: 0.3s ease;
+    box-shadow: 0 3px 15px rgba(0,0,0,0.2);
+}
+
+#country:focus {
+    outline: none;
+    transform: scale(1.03);
+    box-shadow: 0 0 12px rgba(255,255,255,0.7);
+}
+
+
+#lookup {
+    padding: 12px 25px;
+    background: #ffb700;
+    color: #000;
+    border: none;
+    border-radius: 12px;
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.25s ease;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+}
+
+#lookup:hover {
+    background: #ffd75a;
+    transform: scale(1.05);
+}
+
+#lookup:active {
+    transform: scale(0.97);
+}
+
+
+#result {
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 15px;
+    padding: 25px;
+    backdrop-filter: blur(6px);
+    min-height: 40px;
+    animation: fadeIn 0.5s ease;
+}
+
+
+.country-list {
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+}
+
+.country-item {
+    background: rgba(255, 255, 255, 0.18);
+    margin: 10px 0;
+    padding: 15px 18px;
+    border-radius: 12px;
+    font-size: 18px;
+    animation: slideIn 0.4s ease both;
+}
+
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideIn {
+    from { opacity: 0; transform: translateX(-10px); }
+    to   { opacity: 1; transform: translateX(0); }
+}
