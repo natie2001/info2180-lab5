@@ -109,6 +109,37 @@ label {
 }
 
 
+.country-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 12px;
+    overflow: hidden;
+    backdrop-filter: blur(6px);
+}
+
+.country-table th,
+.country-table td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid rgba(255,255,255,0.25);
+}
+
+.country-table th {
+    background: rgba(0,0,0,0.3);
+    font-weight: bold;
+}
+
+.country-table tr:nth-child(even) td {
+    background: rgba(255,255,255,0.08);
+}
+
+.country-table tr:hover td {
+    background: rgba(255,255,255,0.2);
+}
+
+
 @keyframes fadeIn {
     from { opacity: 0; transform: translateY(10px); }
     to   { opacity: 1; transform: translateY(0); }
