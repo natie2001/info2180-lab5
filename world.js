@@ -1,23 +1,30 @@
 window.onload = function () {
-    const button = document.getElementById("lookup");
+    const lookupBtn = document.getElementById("lookup");
+    const lookupCitiesBtn = document.getElementById("lookup-cities");
     const input = document.getElementById("country");
     const resultDiv = document.getElementById("result");
 
-    button.addEventListener("click", function () {
+    // Lookup Country
+    lookupBtn.addEventListener("click", function () {
         const country = input.value.trim();
-
-        
-        const url = "world.php?country=" + encodeURIComponent(country);
-
-       
-        fetch(url)
-            .then(response => response.text())   
-            .then(data => {
-                resultDiv.innerHTML = data;     
-            })
-            .catch(error => {
+        fetch("world.php?country=" + encodeURIComponent(country))
+            .then(res => res.text())
+            .then(data => { resultDiv.innerHTML = data; })
+            .catch(err => {
                 resultDiv.innerHTML = "<p>Error loading data.</p>";
-                console.error("AJAX Error:", error);
+                console.error(err);
+            });
+    });
+
+    // Lookup Cities
+    lookupCitiesBtn.addEventListener("click", function () {
+        const country = input.value.trim();
+        fetch("world.php?country=" + encodeURIComponent(country) + "&lookup=cities")
+            .then(res => res.text())
+            .then(data => { resultDiv.innerHTML = data; })
+            .catch(err => {
+                resultDiv.innerHTML = "<p>Error loading data.</p>";
+                console.error(err);
             });
     });
 };

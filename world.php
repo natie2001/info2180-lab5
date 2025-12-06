@@ -12,64 +12,81 @@ try {
 }
 
 $country = isset($_GET['country']) ? $_GET['country'] : '';
+$lookup = isset($_GET['lookup']) ? $_GET['lookup'] : '';
 
-if (!empty($country)) {
-    $stmt = $conn->prepare("SELECT * FROM countries WHERE name LIKE :country");
-    $stmt->bindValue(':country', "%$country%");
-    $stmt->execute();
+if ($lookup === 'cities') {
+    // Lookup cities only if a country is provided
+    if (!empty($country)) {
+        $stmt = $conn->prepare("
+            SELECT cities.name AS city_name, cities.district, cities.population
+            FROM cities
+            INNER JOIN countries ON cities.country_code = countries.code
+            WHERE countries.name LIKE :country
+            ORDER BY cities.population DESC
+        ");
+        $stmt->bindValue(':country', "%$country%");
+        $stmt->execute();
+        $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    } else {
+        $results = []; // Cannot lookup cities without a country
+    }
 } else {
-    $stmt = $conn->query("SELECT * FROM countries");
+    // Lookup countries
+    if (!empty($country)) {
+        $stmt = $conn->prepare("SELECT * FROM countries WHERE name LIKE :country");
+        $stmt->bindValue(':country', "%$country%");
+        $stmt->execute();
+        $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    } else {
+        // No country input: return all countries
+        $stmt = $conn->query("SELECT * FROM countries");
+        $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }
-
-$results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>World Database Lookup</title>
-    <link rel="stylesheet" href="world.css">
-</head>
-<body>
-    <header>
-        <h1>World Database Lookup</h1>
-    </header>
-
-    <main>
-        <div id="controls">
-            <form method="get" action="world.php">
-                <input type="text" name="country" id="country" placeholder="Enter country name" value="<?php echo htmlspecialchars($country); ?>">
-                <button type="submit" id="lookup">Lookup</button>
-            </form>
-        </div>
-
-        <div id="result">
-            <?php if ($results): ?>
-                <table class="country-table">
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Continent</th>
-                            <th>Independence</th>
-                            <th>Head of State</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach ($results as $row): ?>
-                            <tr>
-                                <td><?php echo htmlspecialchars($row['name']); ?></td>
-                                <td><?php echo htmlspecialchars($row['continent']); ?></td>
-                                <td><?php echo htmlspecialchars($row['independence_year']); ?></td>
-                                <td><?php echo htmlspecialchars($row['head_of_state']); ?></td>
-                            </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
-            <?php else: ?>
-                <p class="no-results">No countries found.</p>
-            <?php endif; ?>
-        </div>
-    </main>
-</body>
-</html>
+<?php if ($results): ?>
+    <?php if ($lookup === 'cities'): ?>
+        <table class="city-table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>District</th>
+                    <th>Population</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($results as $row): ?>
+                    <tr>
+                        <td><?php echo htmlspecialchars($row['city_name']); ?></td>
+                        <td><?php echo htmlspecialchars($row['district']); ?></td>
+                        <td><?php echo htmlspecialchars($row['population']); ?></td>
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    <?php else: ?>
+        <table class="country-table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Continent</th>
+                    <th>Independence</th>
+                    <th>Head of State</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($results as $row): ?>
+                    <tr>
+                        <td><?php echo htmlspecialchars($row['name']); ?></td>
+                        <td><?php echo htmlspecialchars($row['continent']); ?></td>
+                        <td><?php echo htmlspecialchars($row['independence_year']); ?></td>
+                        <td><?php echo htmlspecialchars($row['head_of_state']); ?></td>
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    <?php endif; ?>
+<?php else: ?>
+    <p class="no-results">No results found.</p>
+<?php endif; ?>
