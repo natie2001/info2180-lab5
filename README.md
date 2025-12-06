@@ -1,3 +1,3 @@
 # INFO2180 Lab5
 
-This is Lab 5 for Nathan Hansle.
+This is Lab 5 for Nathan Hansle on PHP and MySQL. 
